@@ -2,12 +2,6 @@
 #define SURFACE_H
 
 #include "SDL.h"
-#include "SDL_ttf.h"
-#include "TextSurface.h"
-#include "Color.h"
-#include "Image.h"
-
-#include "SDL_gfxPrimitives.h"
 
 //----------------------------------------------------------------------------
 // Constants
@@ -55,7 +49,8 @@ public:
 	void update_rect( int=0, int=0, int=0, int=0 );
 	void flip();
 
-	inline Uint32 map_rgb( const Color & color );
+	//not sure if this is needed...
+	//inline Uint32 map_rgb( const Color & color );
 
 	Uint32	get_pixel( int, int );
 	Uint8*	get_pixel_addr( int, int );

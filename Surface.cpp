@@ -1,10 +1,51 @@
 #include <cmath>
 #include "SDL.h"
 #include "Surface.h"
-#include "TextSurface.h"
 
 inline int abs(int x) { return x>=0 ? x : -x ;}
 //inline int min( int a, int b )	{ return ( a<b ? a : b ); }
+
+//----------------------------------------------------------------------------
+// put_pixel functions for different bpp
+//----------------------------------------------------------------------------
+void put_pixel_bpp1( SDL_Surface * surface, int x, int y, Uint32 pixel )
+{
+	int bpp = surface->format->BytesPerPixel;
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+	*p = pixel;
+}
+
+void put_pixel_bpp2( SDL_Surface* surface, int x, int y, Uint32 pixel )
+{
+	int bpp = surface->format->BytesPerPixel;
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+    *(Uint16 *)p = pixel;
+}
+
+void put_pixel_bpp3( SDL_Surface * surface, int x, int y, Uint32 pixel )
+{
+	int bpp = surface->format->BytesPerPixel;
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+    if(SDL_BYTEORDER == SDL_BIG_ENDIAN) 
+	{
+		p[0] = (pixel >> 16) & 0xff;
+		p[1] = (pixel >> 8) & 0xff;
+        p[2] = pixel & 0xff;
+	} 
+	else
+	{
+		p[0] = pixel & 0xff;
+        p[1] = (pixel >> 8) & 0xff;
+        p[2] = (pixel >> 16) & 0xff;
+    }
+}
+
+void put_pixel_bpp4( SDL_Surface * surface, int x, int y, Uint32 pixel )
+{
+	int bpp = surface->format->BytesPerPixel;
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+    *(Uint32 *)p = pixel;
+}
 
 Surface::Surface( int w, int h, int bpp, int flags )
 	: fullscreen_(0), _w(w), _h(h)
@@ -84,11 +125,11 @@ void Surface::update_rect( int x, int y, int w, int h)
 	SDL_UpdateRect ( surface, x, y, w, h );
 }
 
-
-Uint32 Surface::map_rgb( const SDL_Color & color )
-{
-	return SDL_MapRGB( surface->format, color.r, color.g, color.b );
-}
+//not sure if this is needed...
+//Uint32 Surface::map_rgb( const SDL_Color & color )
+//{
+//	return SDL_MapRGB( surface->format, color.r, color.g, color.b );
+//}
 
 
 //----------------------------------------------------------------------------
