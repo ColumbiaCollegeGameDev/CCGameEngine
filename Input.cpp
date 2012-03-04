@@ -1,53 +1,95 @@
 #include "Input.h"
+#include <iostream>
+#include <cstdlib>
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 //Mouse_Input
 
-void Mouse_Input::update(int n)
+void Mouse_Input::reset()
 {
-	//You should call this at the beginning of the game loop *
-	
-	//reset vars
-	bool l_down = left_down, m_down = middle_down, r_down = right_down;//these are used to determine if the buttons are just pressed
-	
-	left_down = 0; middle_down = 0; right_down = 0; wheel_up = 0; wheel_down = 0;
 	left_pressed = 0; middle_pressed = 0; right_pressed = 0;
 	left_released = 0; middle_released = 0; right_released = 0;
-	
-	//check for updates
-	switch(SDL_GetMouseState(&mouse_x, &mouse_y))
+	wheel_up = 0; wheel_down = 0;
+}
+
+void Mouse_Input::pressed(Uint8 button)
+{
+	switch(button)
 	{
-	case SDL_BUTTON(1):
-		if (!l_down) left_pressed = 1;
+	case SDL_BUTTON_LEFT:
+		left_pressed = 1;
 		left_down = 1; 
 		break;
-	case SDL_BUTTON(2): 
-		if (!m_down) middle_pressed = 1;
+	case SDL_BUTTON_MIDDLE: 
+		middle_pressed = 1;
 		middle_down = 1; 
 		break;
-	case SDL_BUTTON(3): 
-		if (!r_down) right_pressed = 1;
+	case SDL_BUTTON_RIGHT: 
+		right_pressed = 1;
 		right_down = 1; 
 		break;
-	case SDL_BUTTON(4): 
-		wheel_up = 1; 
+	case SDL_BUTTON_WHEELUP: 
+		wheel_up = 1;
 		break;
-	case SDL_BUTTON(5): 
+	case SDL_BUTTON_WHEELDOWN: 
 		wheel_down = 1;
 	}
-	
-	//check for releases
-	if (l_down && !left_down) left_released = 1;
-	if (m_down && !middle_down) middle_released = 1;
-	if (r_down && !right_down) right_released = 1;
+}
+
+void Mouse_Input::released(Uint8 button)
+{
+	switch(button)
+	{
+	case SDL_BUTTON_LEFT:
+		left_released = 1;
+		left_down = 0; 
+		break;
+	case SDL_BUTTON_MIDDLE: 
+		middle_released = 1;
+		middle_down = 0; 
+		break;
+	case SDL_BUTTON_RIGHT: 
+		right_released = 1;
+		right_down = 0; 
+		break;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 //Keyboard
 
-void Keyboard::update()
+void Keyboard::reset()
 {
-	
+	keys_pressed.reset();
+	keys_released.reset();
 }
+
+void Keyboard::pressed(SDLKey &keys)
+{
+	keys_pressed.set(keys, 1);
+	keys_down.set(keys, 1);
+}
+
+void Keyboard::released(SDLKey &keys)
+{
+	keys_released.set(keys, 1);
+	keys_down.set(keys, 0);
+}
+
+bool Keyboard::key_pressed(int index)
+{
+	return keys_pressed.test(index);
+}
+
+bool Keyboard::key_down(int index)
+{
+	return keys_down.test(index);
+}
+
+bool Keyboard::key_released(int index)
+{
+	return keys_released.test(index);
+}
+
