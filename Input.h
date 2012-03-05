@@ -4,6 +4,8 @@
 #include <bitset>
 #include "SDL.h"
 
+const int AMOUNT_OF_KEYS = 320; // increase if we find a key we need to use that has a value >= 320
+
 class Mouse_Input
 {
 public:
@@ -16,7 +18,7 @@ public:
 	void pressed(Uint8);
 	void released(Uint8);
 	
-	int mouse_x, mouse_y;
+	int mouse_x, mouse_y, mouse_dx, mouse_dy;
 	bool left_down, left_pressed, left_released;
 	bool middle_down, middle_pressed, middle_released;
 	bool right_down, right_pressed, right_released;
@@ -32,13 +34,25 @@ public:
 	void reset();
 	void pressed(SDLKey&);
 	void released(SDLKey&);
-	bool key_pressed(int); //takes SDL Keys like SDLK_a for the letter a
-	bool key_down(int);
-	bool key_released(int);
+	bool key_pressed(int) const; //takes SDL Keys like SDLK_a for the letter a
+	bool key_down(int) const;
+	bool key_released(int) const;
 private:
-	std::bitset<256> keys_pressed;
-	std::bitset<256> keys_down;
-	std::bitset<256> keys_released;
+	std::bitset<AMOUNT_OF_KEYS> keys_pressed;
+	std::bitset<AMOUNT_OF_KEYS> keys_down;
+	std::bitset<AMOUNT_OF_KEYS> keys_released;
+};
+
+class Events
+{
+public:
+	Events()
+	{}
+	
+	int update();
+	SDL_Event event;
+	Mouse_Input mouse;
+	Keyboard keyboard;
 };
 
 #endif
