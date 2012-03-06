@@ -104,6 +104,30 @@ Uint32 Surface::get_pixel(int x, int y)
 }
 
 
+/////////////////////////////////////////////////////////////////////////
+//Drawing Functions
+
+//Images
+void Surface::put_image(Image & i)
+{
+	SDL_BlitSurface(i.image, &(i.actual_rect), surface, &(i.on_screen_rect));
+}
+
+void Surface::put_image(Animated & a)
+{
+	SDL_BlitSurface(a.image, &(a.individual_rect), surface, &(a.on_screen_rect));
+}
+
+//Fill
+void Surface::fill(const Color &c)
+{
+	SDL_Rect r; r.x = 0; r.y = 0; r.w = _w; r.h = _h;
+	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, c.r, c.g, c.b)); 
+}
+
+/////////////////////////////////////////////////////////////////////////
+
+
 //----------------------------------------------------------------------------
 // flip()
 // Flips the buffers

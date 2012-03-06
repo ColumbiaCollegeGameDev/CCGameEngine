@@ -2,6 +2,8 @@
 #define SURFACE_H
 
 #include "SDL.h"
+#include "Images.h"
+#include "SDL_gfxPrimitives.h"
 
 //----------------------------------------------------------------------------
 // Constants
@@ -16,6 +18,18 @@ class Image;
 
 inline int min( int a, int b )	{ return ( a<b ? a : b ); }
 
+class Color
+{
+public:
+	Color(int r_, int g_, int b_, int a_ = 255)
+		: r(r_), g(g_), b(b_), a(a_)
+	{
+	}
+	
+	unsigned char r, g, b, a;
+};
+const Color BLACK = Color(0, 0, 0, 1);
+const Color WHITE = Color(255, 255, 255);
 
 class Surface{
 
@@ -54,6 +68,30 @@ public:
 
 	Uint32	get_pixel( int, int );
 	Uint8*	get_pixel_addr( int, int );
+	
+	/////////////////////////////////////////////////////////////////////////
+	//Drawing Functions
+	
+	//Images
+	void put_image(Image &);
+	void put_image(Animated &);
+	void put_image(Image &i, int x, int y)
+	{
+		i.on_screen_rect.x = x;
+		i.on_screen_rect.y = y;
+		put_image(i);
+	}
+	void put_image(Animated &a, int x, int y)
+	{
+		a.on_screen_rect.x = x;
+		a.on_screen_rect.y = y;
+		put_image(a);
+	}
+	
+	//Fill
+	void fill(const Color &c);
+	
+	/////////////////////////////////////////////////////////////////////////
 	
 	
 	//------------------------------------------------------------------------
