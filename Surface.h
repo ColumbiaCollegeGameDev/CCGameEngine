@@ -2,6 +2,7 @@
 #define SURFACE_H
 
 #include "SDL.h"
+#include "SDL_ttf.h"
 #include "Images.h"
 #include "SDL_gfxPrimitives.h"
 
@@ -87,6 +88,9 @@ public:
 		a.on_screen_rect.y = y;
 		put_image(a);
 	}
+	
+	//Rectangle
+	//void put_rect();
 	
 	//Fill
 	void fill(const Color &c);

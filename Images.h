@@ -30,8 +30,8 @@ public:
 class Animated
 {
 public:
-	Animated(const char * filename)
-		: image(IMG_Load(filename)), frame(0), advance_dir(1)
+	Animated(const char * filename, short delay_ = 0, bool reverse_ = 0)
+		: image(IMG_Load(filename)), frame(0), advance_dir(1), delay(delay_), reverse(0), delay_count(0)
 	{
 		if (image == NULL)
 		{
@@ -40,30 +40,65 @@ public:
 		}
 		actual_rect = image->clip_rect;
 		individual_rect = actual_rect;
-		
-		if (actual_rect.w < actual_rect.h) // image is vertical based
+		determine_size();
+	}
+	Animated(const char * filename, short w, short h, short delay_ = 0, bool reverse_ = 0)
+		: image(IMG_Load(filename)), frame(0), advance_dir(1), delay(delay_), reverse(reverse_), delay_count(0)
+	{
+		if (image == NULL)
 		{
-			individual_rect.w = actual_rect.w;
-			individual_rect.h = actual_rect.w;
+			printf("Error in Image::Image(): No image file %s\n", filename);
+			exit(1);
+		}
+		actual_rect = image->clip_rect;
+		individual_rect = actual_rect;
+		individual_rect.w = w;
+		individual_rect.h = h;
+		if (actual_rect.w < actual_rect.h)
+		{
 			is_horizontal = 0;
-			frames = actual_rect.h / actual_rect.w;
+			frames = actual_rect.h / individual_rect.h;
 		}
-		else // image is horizontal based
+		else
 		{
-			individual_rect.w = actual_rect.h;
-			individual_rect.h = actual_rect.h;
 			is_horizontal = 1;
-			frames = actual_rect.w / actual_rect.h;
+			frames = actual_rect.w / individual_rect.w;
 		}
-		on_screen_rect = individual_rect;
 	}
 	~Animated()
 	{
 	 	SDL_FreeSurface(image);
 	}
 	
+	void determine_size()//this makes the individual rect a square based on w or h
+	{
+		individual_rect = actual_rect;
+		
+		if (actual_rect.w < actual_rect.h) // image is vertical based
+		{
+			individual_rect.w = actual_rect.w;
+			individual_rect.h = actual_rect.w;
+			is_horizontal = 0;
+			frames = actual_rect.h / individual_rect.h;
+		}
+		else // image is horizontal based
+		{
+			individual_rect.w = actual_rect.h;
+			individual_rect.h = actual_rect.h;
+			is_horizontal = 1;
+			frames = actual_rect.w / individual_rect.w;
+		}
+		on_screen_rect = individual_rect;
+	}
+	
 	void step() // must call to have the image actually animate.
 	{
+		//delay causes a delay to slow down the animation
+		//reverse determines whether or not the frame step follows a sine wave ex: 1234321234321 vs 123412341234
+		if (delay_count < delay) {delay_count++; return;}
+		else
+			delay_count = 0;
+			
 		frame += 1 * (advance_dir ? 1 : -1);
 		if (frame >= frames)
 		{
@@ -94,7 +129,7 @@ public:
 	SDL_Surface *image;
 	SDL_Rect actual_rect, individual_rect, on_screen_rect;
 private:
-	short frame, frames;
+	short frame, frames, delay, delay_count;
 	bool reverse, advance_dir, is_horizontal;
 };
 
