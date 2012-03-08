@@ -90,7 +90,7 @@ public:
 	}
 	
 	//Rectangle
-	//void put_rect();
+	void put_rect();
 	
 	//Fill
 	void fill(const Color &c);

@@ -118,10 +118,10 @@ void Surface::put_image(Animated & a)
 	SDL_BlitSurface(a.image, &(a.individual_rect), surface, &(a.on_screen_rect));
 }
 
-//void Surface::put_rect()
-//{
-//	rectangleColor(surface, 0, 0, 200, 200, SDL_MapRGB(surface->format, 200, 200, 200));
-//}
+void Surface::put_rect()
+{
+	rectangleColor(surface, 0, 0, 200, 200, SDL_MapRGB(surface->format, 200, 200, 200));
+}
 
 //Fill
 void Surface::fill(const Color &c)

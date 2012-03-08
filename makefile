@@ -1,5 +1,5 @@
-exe:	*.cpp
-	g++ -g *.cpp `sdl-config --cflags --libs` -lSDL_image -lSDL_mixer -lSDL_ttf 
+exe:	*.cpp *.c
+	g++ -g *.cpp *.c `sdl-config --cflags --libs` -lSDL_image -lSDL_mixer -lSDL_ttf 
 	
 start:
 	gedit main.cpp&
