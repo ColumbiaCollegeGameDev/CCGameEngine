@@ -6,6 +6,8 @@
 #include <SDL_rotozoom.h>
 #include "Surface.h"
 
+class Surface;
+
 class Image{
 
 public:
@@ -25,13 +27,8 @@ public:
 	 	SDL_FreeSurface(image);
 	}
 	// Blits the shrinked image by x and y ratios
-	void shrink( Surface surf, double x=1.0, double y=1.0 )
-	{
-		Image shrunk(*this);
-
-		shrunk.image = shrinkSurface(shrunk.image, x, y);
-		surf.put_image(shrunk);
-	}
+	void shrink( Surface, double, double );
+	void shrink( Surface, double, double, int, int );
 	
 	SDL_Surface *image;
 	SDL_Rect actual_rect, on_screen_rect;

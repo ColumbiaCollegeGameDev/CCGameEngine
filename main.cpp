@@ -3,6 +3,8 @@
 #include "Surface.h"
 #include "Input.h"
 #include "Images.h"
+#include <math.h>
+#include <SDL_rotozoom.h>
 
 const int WINDOW_W = 640;
 const int WINDOW_H = 480;
@@ -16,6 +18,12 @@ int main(int argc, char* argv[])
 	Animated player_run("images/player/player_jungle_run.png", 72, 122, 10);  //filename, width of frame, height of frame, delay
 	Animated player_jump("images/player/player_jungle_jump.png", 70, 122, 10);
 	Animated player_barrelroll("images/player/player_jungle_barrelroll.png", 140, 122, 6);
+	Image dog("images/dog.png");
+	double x_ratio = 1.0;
+	double y_ratio = 1.0;
+	// Function that takes the SDL_Surface * of an Image an shrinks it. Returns an SDL_Surface* - used to change the current image in an Image
+	//dog.image = shrinkSurface(dog.image, x_ratio, y_ratio);
+
 	while (1)
 	{
 		///////////////////////////////////////////////////////////////////////
@@ -36,6 +44,8 @@ int main(int argc, char* argv[])
 		//Draw the Screen
 		
 		surface.fill(BLACK);
+		//dog.shrink(surface, 3.0, 3.0); // shrink the image by x-3 y-3
+		dog.shrink(surface, 3.0, 3.0, 0, 300); // another way to shrink the image and updating the x, y pos's
 		player_run.step();
 		player_run.on_screen_rect.x = 0; //set screen pos like this
 		player_run.on_screen_rect.y = 0;
