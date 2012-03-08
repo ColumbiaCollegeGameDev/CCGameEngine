@@ -118,16 +118,105 @@ void Surface::put_image(Animated & a)
 	SDL_BlitSurface(a.image, &(a.individual_rect), surface, &(a.on_screen_rect));
 }
 
-void Surface::put_rect()
+//Pixels
+void Surface::put_pixel(short x, short y, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
-	rectangleColor(surface, 0, 0, 200, 200, SDL_MapRGB(surface->format, 200, 200, 200));
+	pixelRGBA(surface, x, y, r, g, b, a);
+}
+
+//Lines
+void Surface::put_line(short x1, short y1, short x2, short y2, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	if(x1 == x2)
+	{
+		if (y1 == y2)
+			pixelRGBA(surface, x1, y1, r, g, b, a);
+		else
+			vlineRGBA(surface, x1, y1, y2, r, g, b, a);
+	}
+	else if (y1 == y2)
+		hlineRGBA(surface, x1, x2, y1, r, g, b, a);
+	else
+		lineRGBA(surface, x1, y1, x2, y2, r, g, b, a);
+}
+
+void Surface::put_line_aa(short x1, short y1, short x2, short y2, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	if(x1 == x2)
+	{
+		if (y1 == y2)
+			pixelRGBA(surface, x1, y1, r, g, b, a);
+		else
+			vlineRGBA(surface, x1, y1, y2, r, g, b, a);
+	}
+	else if (y1 == y2)
+		hlineRGBA(surface, x1, x2, y1, r, g, b, a);
+	else
+		aalineRGBA(surface, x1, y1, x2, y2, r, g, b, a);
+}
+
+//Rectangles
+void Surface::put_rect(short x1, short y1, short x2, short y2, unsigned char r, unsigned char g, unsigned char b, unsigned char a, bool fill)
+{
+	if (fill)
+		boxRGBA(surface, x1, y1, x2, y2, r, g, b, a);
+	else
+		rectangleRGBA(surface, x1, y1, x2, y2, r, g, b, a);
+}
+
+//Circle
+void Surface::put_circle(short x1, short y1, short rr, unsigned char r, unsigned char g, unsigned char b, unsigned char a, bool fill)
+{
+	if (fill)
+		filledCircleRGBA(surface, x1, y1, rr, r, g, b, a);
+	else
+		circleRGBA(surface, x1, y1, rr, r, g, b, a);
+}
+
+void Surface::put_circle_aa(short x1, short y1, short rr, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	aacircleRGBA(surface, x1, y1, rr, r, g, b, a);
+}
+
+//Ellipse
+void Surface::put_ellipse(short x1, short y1, short rx, short ry, unsigned char r, unsigned char g, unsigned char b, unsigned char a, bool fill)
+{
+	if (fill)
+		filledEllipseRGBA(surface, x1, y1, rx, ry, r, g, b, a);
+	else
+		ellipseRGBA(surface, x1, y1, rx, ry, r, g, b, a);
+}
+
+void Surface::put_ellipse_aa(short x1, short y1, short rx, short ry, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	aaellipseRGBA(surface, x1, y1, rx, ry, r, g, b, a);
+}
+
+//Polygon
+void Surface::put_polygon(short *x, short *y, short n, unsigned char r, unsigned char g, unsigned char b, unsigned char a, bool fill)
+{
+	if (fill)
+		filledPolygonRGBA(surface, x, y, n, r, g, b, a);
+	else
+		polygonRGBA(surface, x, y, n, r, g, b, a);
+}
+
+void Surface::put_polygon_aa(short *x, short *y, short n, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	aapolygonRGBA(surface, x, y, n, r, g, b, a);
 }
 
 //Fill
 void Surface::fill(const Color &c)
 {
-	SDL_Rect r; r.x = 0; r.y = 0; r.w = _w; r.h = _h;
-	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, c.r, c.g, c.b)); 
+	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, c.r, c.g, c.b));
+}
+
+//Strings
+//Polygon
+void Surface::put_text(short x, short y, const char *ch, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	stringRGBA(surface, x, y, ch, r, g, b, a);
 }
 
 /////////////////////////////////////////////////////////////////////////
