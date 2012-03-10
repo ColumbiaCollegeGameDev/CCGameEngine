@@ -27,8 +27,8 @@ public:
 	 	SDL_FreeSurface(image);
 	}
 	// Blits the shrinked image by x and y ratios
-	void shrink( Surface, double, double );
-	void shrink( Surface, double, double, int, int );
+	void shrink( double, double );
+	void shrink( double, double, int, int );
 	
 	SDL_Surface *image;
 	SDL_Rect actual_rect, on_screen_rect;
