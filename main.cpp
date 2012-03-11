@@ -20,14 +20,9 @@ int main(int argc, char* argv[])
 	Animated player_barrelroll("images/player/player_jungle_barrelroll.png", 140, 122, 6);
 	double x_ratio = 1.0;
 	double y_ratio = 1.0;
-	Image robot("images/robot.png");
-	// Function that takes the SDL_Surface * of an Image an shrinks it. Returns an SDL_Surface* - used to change the current image in an Image
-	//dog.image = shrinkSurface(dog.image, x_ratio, y_ratio);
-	robot.image = rotozoomSurface( robot.image, 30.0, 1.0, 1 );
 
 	while (1)
 	{
-		std::cout << "robot w: " << robot.actual_rect.w << std::endl;
 		///////////////////////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////
 		//Handle the events
@@ -46,7 +41,7 @@ int main(int argc, char* argv[])
 		//Draw the Screen
 		
 		surface.fill(BLACK);
-		surface.put_image(robot, 0, 300);
+		//surface.put_image(robot, 0, 250);
 		player_run.step();
 		player_run.on_screen_rect.x = 0; //set screen pos like this
 		player_run.on_screen_rect.y = 0;
@@ -54,19 +49,18 @@ int main(int argc, char* argv[])
 		player_jump.on_screen_rect.x = 0;
 		player_jump.on_screen_rect.y = 125;
 		player_barrelroll.step();
-		
+	
 		surface.put_image(player_run);
 		surface.put_image(player_jump);
 		surface.put_image(player_barrelroll, 75, 0); //or set screen pos like this
-		
+
 		//Polygon example
-		//short x[] = {50, 150, 200};
+		//short x[] = {50, 150, 200}; 	
 		//short y[] = {50, 400, 300};
 		//surface.put_polygon(x, y, 3, WHITE);
 		
 		//Text example
 		surface.put_text(300, 300, "Hello World", 200, 0, 0, 200);//this method can have different fonts and sizes but it not as simple yet...
-		
 		surface.flip();
 		SDL_Delay(10);
 		
